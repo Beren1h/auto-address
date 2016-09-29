@@ -2,12 +2,12 @@
   "bindings": [
     {
       "authLevel": "function",
-      "name": "request",
+      "name": "req",
       "type": "httpTrigger",
       "direction": "in"
     },
     {
-      "name": "response",
+      "name": "res",
       "type": "http",
       "direction": "out"
     }
