@@ -7,7 +7,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
     var id = ConfigurationManager.AppSettings["SmartyAuthId"];
     var token = ConfigurationManager.AppSettings["SmartyAuthToken"];
     var primer = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "primer", true) == 0).Value;
-    var smarty = $"https://us-autocomplete.api.smartystreets.com/suggest?auth-id={id}&auth-token={token}prefix={primer}";
+    var smarty = $"https://us-autocomplete.api.smartystreets.com/suggest?auth-id={id}&auth-token={token}&prefix={primer}";
     log.Info(smarty);
     using(var client = new HttpClient())
     {
