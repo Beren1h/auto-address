@@ -1,6 +1,21 @@
 using System.Net;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Configuration;
+using Newtonsoft.Json;
+
+public class Suggestions
+{
+    public List<Suggestion> Suggestions { get; set; }
+}
+
+public class Suggestion
+{
+    public string text { get; set; }
+    public string street_line { get; set; }
+    public string city { get; set; }
+    public string state { get; set; }
+}
 
 public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, TraceWriter log)
 {
@@ -8,10 +23,13 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
     var token = ConfigurationManager.AppSettings["SmartyAuthToken"];
     var primer = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "primer", true) == 0).Value;
     var smarty = $"https://us-autocomplete.api.smartystreets.com/suggest?auth-id={id}&auth-token={token}&prefix={primer}";
-    log.Info(smarty);
+    
     using(var client = new HttpClient())
     {
-        return await client.GetAsync(smarty);
+        var test = await client.GetAsync(smarty);
+        var test2 = JsonConvert.DeserializeObject<Suggestions>(test);
+        log.Info(test2);
+        return test;
     }
     
     return request.CreateResponse(HttpStatusCode.InternalServerError, "too bad so sad");
