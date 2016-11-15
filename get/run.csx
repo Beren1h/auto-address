@@ -35,7 +35,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             return request.CreateResponse(HttpStatusCode.OK, "There can be only one!!!");
         }
 
-        var final = JsonConvert.SerializeObject(hydrate).repalce("\"","'");
+        var final = JsonConvert.SerializeObject(hydrate).Repalce("\"","'");
         return request.CreateResponse(HttpStatusCode.OK, final);
 
     }
