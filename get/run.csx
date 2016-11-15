@@ -27,9 +27,8 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
     using(var client = new HttpClient())
     {
         var test = await client.GetAsync(smarty);
-        var test2 = JsonConvert.DeserializeObject<Thing>(test);
+        var test2 = JsonConvert.DeserializeObject<Thing>(test.Content);
         log.Info(test2);
-        //force deploy
         return test;
     }
     
