@@ -32,11 +32,11 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
         var hydrate = JsonConvert.DeserializeObject<SuggestionContainer>(content);
 
         if(hydrate.Suggestions.Count == 1){
-            return request.CreateResponse(HttpStatusCode.OK, "There can be only one!!!")
+            return request.CreateResponse(HttpStatusCode.OK, "There can be only one!!!");
         }
 
         var final = JsonConvert.SerializeObject(hydrate);
-        return request.CreateResponse(HttpStatusCode.OK, final)
+        return request.CreateResponse(HttpStatusCode.OK, final);
 
     }
     
