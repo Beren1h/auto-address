@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Configuration;
 using Newtonsoft.Json;
 
-public class Thing
+public class SuggestionContainer
 {
     public List<Suggestion> Suggestions { get; set; }
 }
@@ -15,6 +15,7 @@ public class Suggestion
     public string street_line { get; set; }
     public string city { get; set; }
     public string state { get; set; }
+    public string zip { get; set; }
 }
 
 public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, TraceWriter log)
@@ -26,11 +27,17 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
     
     using(var client = new HttpClient())
     {
-        var test = await client.GetAsync(smarty);
-        var content = await test.Content.ReadAsStringAsync();
-        var test2 = JsonConvert.DeserializeObject<Thing>(content);
-        log.Info(test2.Suggestions.Count.ToString());
-        return test;
+        var response = await client.GetAsync(smarty);
+        var content = await response.Content.ReadAsStringAsync();
+        var hydrate = JsonConvert.DeserializeObject<SuggestionContainer>(content);
+
+        if(hydrate.Suggestions.Count == 1){
+            return request.CreateResponse(HttpStatusCode.OK, "There can be only one!!!")
+        }
+
+        var final = JsonConvert.SerializeObject(hydrate);
+        return request.CreateResponse(HttpStatusCode.OK, final)
+
     }
     
     return request.CreateResponse(HttpStatusCode.InternalServerError, "too bad so sad");
