@@ -29,7 +29,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
         var test = await client.GetAsync(smarty);
         var content = await test.Content.ReadAsStringAsync();
         var test2 = JsonConvert.DeserializeObject<Thing>(content);
-        log.Info(test2.Suggestions.Count);
+        log.Info(test2.Suggestions.Count.ToString());
         return test;
     }
     
