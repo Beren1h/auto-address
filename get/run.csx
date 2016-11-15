@@ -37,6 +37,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
 
         var final = JsonConvert.SerializeObject(hydrate);
         return request.CreateResponse(HttpStatusCode.OK, final);
+        //force deploy
 
     }
     
