@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Configuration;
 using Newtonsoft.Json;
 
-public class Suggestions
+public class Thing
 {
     public List<Suggestion> Suggestions { get; set; }
 }
