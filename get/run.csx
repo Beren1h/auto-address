@@ -15,7 +15,11 @@ public class Suggestion
     public string street_line { get; set; }
     public string city { get; set; }
     public string state { get; set; }
-    public string zip { get; set; }
+    public string zipcode { get; set; }
+    public string primary_number { get; set; }
+    public string street_predirection { get; set;}
+    public string street_name { get; set; }
+    public string street_suffix { get; set; }
 
 }
 
@@ -29,6 +33,10 @@ public class Verification
 public class VerificationComponent
 {
     public string zipcode { get; set; }
+    public string primary_number { get; set; }
+    public string street_predirection { get; set;}
+    public string street_name { get; set; }
+    public string street_suffix { get; set; }
 }
 
 
@@ -50,7 +58,11 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var response2 = await client.GetAsync(smarty2);
             var content2 = await response2.Content.ReadAsStringAsync();
             var hydrate2 = JsonConvert.DeserializeObject<List<Verification>>(content2);
-            hydrate.Suggestions[0].zip = hydrate2[0].components.zipcode;
+            hydrate.Suggestions[0].zipcode = hydrate2[0].components.zipcode;
+            hydrate.Suggestions[0].primary_number = hydrate2[0].components.primary_number;
+            hydrate.Suggestions[0].street_name = hydrate2[0].components.street_name;
+            hydrate.Suggestions[0].street_suffix = hydrate2[0].components.street_suffix;
+            hydrate.Suggestions[0].street_predirection = hydrate2[0].components.street_predirection;
         }
 
         return request.CreateResponse(HttpStatusCode.OK, hydrate);
