@@ -50,11 +50,11 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
         var hydrate = JsonConvert.DeserializeObject<SuggestionContainer>(content);
 
         if(hydrate.Suggestions.Count == 1){
-            var smarty2 = $"https://us-street.api.smartystreets.com/street-address?auth-id={id}&auth-token={token}&canidates=10&street={hydrate.Suggestions[0].street_line}&city={hydrate.Suggestion[0].city}&state={hydrate.Suggestions[0].state}";
+            var smarty2 = $"https://us-street.api.smartystreets.com/street-address?auth-id={id}&auth-token={token}&canidates=10&street={hydrate.Suggestions[0].street_line}&city={hydrate.Suggestions[0].city}&state={hydrate.Suggestions[0].state}";
             var response2 = await client.GetAsync(smarty2);
             var content2 = await response2.Content.ReadAsStringAsync();
             var hydrate2 = JsonConvert.DeserializeObject<VerificationContainer>(content2);
-            hydrate.Suggestions[0].zip = hydrate2.Verifications[0.components.zippcode;]
+            hydrate.Suggestions[0].zip = hydrate2.Verifications[0].components.zippcode;
         }
 
         //var final = JsonConvert.SerializeObject(hydrate).Replace("\"","'");
