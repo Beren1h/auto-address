@@ -44,7 +44,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
 {
     try{
         var test = new Exception("test exception");
-        log.Error(test)
+        log.Error(test);
         var id = ConfigurationManager.AppSettings["SmartyAuthId"];
         var token = ConfigurationManager.AppSettings["SmartyAuthToken"];
         var primer = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "primer", true) == 0).Value;
@@ -71,7 +71,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
         }
     }
     catch(Exception x){
-        log.Error(x.Message)
+        log.Error(x.Message);
         return request.CreateResponse(HttpStatusCode.InternalServerError, x.Message);
     }
 }
