@@ -82,7 +82,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var hydrate = JsonConvert.DeserializeObject<PredictionContainer>(content);
             var conversion = new SuggestionContainer{
                 Suggestions = new List<Suggestion>()
-            }
+            };
             foreach (var prediction in hyrdate.Predictions)
             {
                 conversion.Add(new Suggestion{
