@@ -86,7 +86,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             foreach (var prediction in hyrdate.Predictions)
             {
                  conversion.Suggestions.Add(new Suggestion{
-                     text = prediction.description;
+                     text = prediction.description
                  });
             }
             return request.CreateResponse(HttpStatusCode.OK, conversion);
