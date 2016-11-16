@@ -4,6 +4,33 @@ using System.Net.Http;
 using System.Configuration;
 using Newtonsoft.Json;
 
+public class PredictionContainer
+{
+    public List<Prediction> Prediction { get; set; }
+}
+
+public class Prediction
+{
+    public string descrption { get; set; }
+}
+
+public class ResultContainer
+{
+    public List<Result> Results { get; set; }
+}
+
+public class Result
+{
+    public List<AddressComponent> AddressComponents { get; set; }
+}
+
+public class AddressComponent
+{
+    public string short_name { get; set; }
+    public string long_name { get; set; }
+    public List<string> terms { get; set; }
+}
+
 public class SuggestionContainer
 {
     public List<Suggestion> Suggestions { get; set; }
@@ -43,28 +70,28 @@ public class VerificationComponent
 public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, TraceWriter log)
 {
     try{
-        var id = ConfigurationManager.AppSettings["SmartyAuthId"];
-        var token = ConfigurationManager.AppSettings["SmartyAuthToken"];
+        var placeId = ConfigurationManager.AppSettings["googlePlaceKey"];
+        var geocodeId = ConfigurationManager.AppSettings["googleGeoCodeKey"];
         var primer = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "primer", true) == 0).Value;
-        var smarty = $"https://us-autocomplete.api.smartystreets.com/suggest?auth-id={id}&auth-token={token}&prefix={primer}";
+        var google = $"https://maps.googleapis.com/maps/api/place/autocomplete/json?input={primer}&type=address&key={placeId}";
         
         using(var client = new HttpClient())
         {
-            var response = await client.GetAsync(smarty);
+            var response = await client.GetAsync(google);
             var content = await response.Content.ReadAsStringAsync();
-            var hydrate = JsonConvert.DeserializeObject<SuggestionContainer>(content);
+            var hydrate = JsonConvert.DeserializeObject<PredictionContainer>(content);
 
-            if(hydrate.Suggestions != null && hydrate.Suggestions.Count == 1){
-                var smarty2 = $"https://us-street.api.smartystreets.com/street-address?auth-id={id}&auth-token={token}&canidates=10&street={hydrate.Suggestions[0].street_line}&city={hydrate.Suggestions[0].city}&state={hydrate.Suggestions[0].state}";
-                var response2 = await client.GetAsync(smarty2);
-                var content2 = await response2.Content.ReadAsStringAsync();
-                var hydrate2 = JsonConvert.DeserializeObject<List<Verification>>(content2);
-                hydrate.Suggestions[0].zipcode = hydrate2[0].components.zipcode;
-                hydrate.Suggestions[0].primary_number = hydrate2[0].components.primary_number;
-                hydrate.Suggestions[0].street_name = hydrate2[0].components.street_name;
-                hydrate.Suggestions[0].street_suffix = hydrate2[0].components.street_suffix;
-                hydrate.Suggestions[0].street_predirection = hydrate2[0].components.street_predirection;
-            }
+            // if(hydrate.Suggestions != null && hydrate.Suggestions.Count == 1){
+            //     var smarty2 = $"https://us-street.api.smartystreets.com/street-address?auth-id={id}&auth-token={token}&canidates=10&street={hydrate.Suggestions[0].street_line}&city={hydrate.Suggestions[0].city}&state={hydrate.Suggestions[0].state}";
+            //     var response2 = await client.GetAsync(smarty2);
+            //     var content2 = await response2.Content.ReadAsStringAsync();
+            //     var hydrate2 = JsonConvert.DeserializeObject<List<Verification>>(content2);
+            //     hydrate.Suggestions[0].zipcode = hydrate2[0].components.zipcode;
+            //     hydrate.Suggestions[0].primary_number = hydrate2[0].components.primary_number;
+            //     hydrate.Suggestions[0].street_name = hydrate2[0].components.street_name;
+            //     hydrate.Suggestions[0].street_suffix = hydrate2[0].components.street_suffix;
+            //     hydrate.Suggestions[0].street_predirection = hydrate2[0].components.street_predirection;
+            // }
             return request.CreateResponse(HttpStatusCode.OK, hydrate);
         }
     }
