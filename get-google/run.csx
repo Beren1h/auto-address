@@ -80,7 +80,8 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var response = await client.GetAsync(google);
             var content = await response.Content.ReadAsStringAsync();
             var hydrate = JsonConvert.DeserializeObject<PredictionContainer>(content);
-
+            log.Info(content);
+            log.Info(google);
             // if(hydrate.Suggestions != null && hydrate.Suggestions.Count == 1){
             //     var smarty2 = $"https://us-street.api.smartystreets.com/street-address?auth-id={id}&auth-token={token}&canidates=10&street={hydrate.Suggestions[0].street_line}&city={hydrate.Suggestions[0].city}&state={hydrate.Suggestions[0].state}";
             //     var response2 = await client.GetAsync(smarty2);
