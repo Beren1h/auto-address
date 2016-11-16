@@ -83,12 +83,12 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var conversion = new SuggestionContainer{
                 Suggestions = new List<Suggestion>()
             };
-            foreach (var prediction in hyrdate.Predictions)
-            {
-                conversion.Add(new Suggestion{
-                    text = prediction.description;
-                });
-            }
+            // foreach (var prediction in hyrdate.Predictions)
+            // {
+            //     conversion.Add(new Suggestion{
+            //         text = prediction.description;
+            //     });
+            // }
             reutrn request.CreateResponse(HttpStatusCode.OK, conversion);
             if(hydrate.Predictions != null && hydrate.Predictions.Count == 1){
                 var google2 = $"https://maps.googleapis.com/maps/api/geocode/json?address={hydrate.Predictions[0].description}&key={geocodeId}";
