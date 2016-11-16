@@ -16,6 +16,7 @@ public class Suggestion
     public string city { get; set; }
     public string state { get; set; }
     public string zip { get; set; }
+
 }
 
 public class Verification
@@ -44,7 +45,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
         var content = await response.Content.ReadAsStringAsync();
         var hydrate = JsonConvert.DeserializeObject<SuggestionContainer>(content);
 
-        if(hydrate.Suggestions.Count == 1){
+        if(hydrate.Suggestions != null && hydrate.Suggestions.Count == 1){
             var smarty2 = $"https://us-street.api.smartystreets.com/street-address?auth-id={id}&auth-token={token}&canidates=10&street={hydrate.Suggestions[0].street_line}&city={hydrate.Suggestions[0].city}&state={hydrate.Suggestions[0].state}";
             var response2 = await client.GetAsync(smarty2);
             var content2 = await response2.Content.ReadAsStringAsync();
@@ -52,7 +53,6 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             hydrate.Suggestions[0].zip = hydrate2[0].components.zipcode;
         }
 
-        //var final = JsonConvert.SerializeObject(hydrate).Replace("\"","'");
         return request.CreateResponse(HttpStatusCode.OK, hydrate);
 
     }
