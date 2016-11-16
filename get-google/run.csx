@@ -80,6 +80,16 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var response = await client.GetAsync(google);
             var content = await response.Content.ReadAsStringAsync();
             var hydrate = JsonConvert.DeserializeObject<PredictionContainer>(content);
+            var conversion = new SuggestionContainer{
+                Suggestions = new List<Suggestion>()
+            }
+            foreach (var prediction in hyrdate.Predictions)
+            {
+                conversion.Add(new Suggestion{
+                    text = prediction.description;
+                })
+            }
+            reutrn request.CreateResponse(HttpStatusCode.OK, conversion);
             if(hydrate.Predictions != null && hydrate.Predictions.Count == 1){
                 var google2 = $"https://maps.googleapis.com/maps/api/geocode/json?address={hydrate.Predictions[0].description}&key={geocodeId}";
                 var response2 = await client.GetAsync(google2);
