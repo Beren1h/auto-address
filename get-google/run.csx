@@ -21,7 +21,7 @@ public class ResultContainer
 
 public class Result
 {
-    public List<AddressComponent> AddressComponents { get; set; }
+    public List<AddressComponent> address_components { get; set; }
 }
 
 public class AddressComponent
