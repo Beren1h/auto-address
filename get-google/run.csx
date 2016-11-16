@@ -83,7 +83,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var conversion = new SuggestionContainer{
                 Suggestions = new List<Suggestion>()
             };
-            foreach (var prediction in hyrdate.Predictions)
+            foreach (var prediction in hydrate.Predictions)
             {
                  conversion.Suggestions.Add(new Suggestion{
                      text = prediction.description
