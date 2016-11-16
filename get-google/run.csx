@@ -87,7 +87,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             {
                 conversion.Add(new Suggestion{
                     text = prediction.description;
-                })
+                });
             }
             reutrn request.CreateResponse(HttpStatusCode.OK, conversion);
             if(hydrate.Predictions != null && hydrate.Predictions.Count == 1){
