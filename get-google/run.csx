@@ -11,7 +11,7 @@ public class PredictionContainer
 
 public class Prediction
 {
-    public string descrption { get; set; }
+    public string description { get; set; }
 }
 
 public class ResultContainer
