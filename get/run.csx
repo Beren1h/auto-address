@@ -49,7 +49,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var response2 = await client.GetAsync(smarty2);
             var content2 = await response2.Content.ReadAsStringAsync();
             var hydrate2 = JsonConvert.DeserializeObject<List<Verification>>(content2);
-            hydrate.Suggestions[0].zip = hydrate2.Verifications[0].components.zipcode;
+            hydrate.Suggestions[0].zip = hydrate2[0].components.zipcode;
         }
 
         //var final = JsonConvert.SerializeObject(hydrate).Replace("\"","'");
