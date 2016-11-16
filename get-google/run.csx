@@ -80,17 +80,18 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var response = await client.GetAsync(google);
             var content = await response.Content.ReadAsStringAsync();
             var hydrate = JsonConvert.DeserializeObject<PredictionContainer>(content);
-            // if(hydrate.Suggestions != null && hydrate.Suggestions.Count == 1){
-            //     var smarty2 = $"https://us-street.api.smartystreets.com/street-address?auth-id={id}&auth-token={token}&canidates=10&street={hydrate.Suggestions[0].street_line}&city={hydrate.Suggestions[0].city}&state={hydrate.Suggestions[0].state}";
-            //     var response2 = await client.GetAsync(smarty2);
-            //     var content2 = await response2.Content.ReadAsStringAsync();
-            //     var hydrate2 = JsonConvert.DeserializeObject<List<Verification>>(content2);
-            //     hydrate.Suggestions[0].zipcode = hydrate2[0].components.zipcode;
-            //     hydrate.Suggestions[0].primary_number = hydrate2[0].components.primary_number;
-            //     hydrate.Suggestions[0].street_name = hydrate2[0].components.street_name;
-            //     hydrate.Suggestions[0].street_suffix = hydrate2[0].components.street_suffix;
-            //     hydrate.Suggestions[0].street_predirection = hydrate2[0].components.street_predirection;
-            // }
+            if(hydrate.Suggestions != null && hydrate.Suggestions.Count == 1){
+                var google2 = $"https://maps.googleapis.com/maps/api/geocode/json?address={hydrate.Predictions[0].description&key={geoCodeId}";
+                var response2 = await client.GetAsync(google2);
+                var content2 = await response2.Content.ReadAsStringAsync();
+                var hydrate2 = JsonConvert.DeserializeObject<List<Result>>(content2);
+                //hydrate.Suggestions[0].zipcode = hydrate2[0].components.zipcode;
+                //hydrate.Suggestions[0].primary_number = hydrate2[0].components.primary_number;
+                //hydrate.Suggestions[0].street_name = hydrate2[0].components.street_name;
+                //hydrate.Suggestions[0].street_suffix = hydrate2[0].components.street_suffix;
+                //hydrate.Suggestions[0].street_predirection = hydrate2[0].components.street_predirection;
+                return request.CreateResponse(HttpStatusCode.OK, hydrate2);
+            }
             return request.CreateResponse(HttpStatusCode.OK, hydrate);
         }
     }
