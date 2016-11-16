@@ -44,7 +44,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
 {
     try{
         var test = new Exception("test exception");
-        log.Error(test);
+        log.Error(test.Message);
         var id = ConfigurationManager.AppSettings["SmartyAuthId"];
         var token = ConfigurationManager.AppSettings["SmartyAuthToken"];
         var primer = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "primer", true) == 0).Value;
