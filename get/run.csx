@@ -54,7 +54,6 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var content = await response.Content.ReadAsStringAsync();
             var hydrate = JsonConvert.DeserializeObject<SuggestionContainer>(content);
 
-            throw new Exception("a warp core breach is imminent");
             if(hydrate.Suggestions != null && hydrate.Suggestions.Count == 1){
                 var smarty2 = $"https://us-street.api.smartystreets.com/street-address?auth-id={id}&auth-token={token}&canidates=10&street={hydrate.Suggestions[0].street_line}&city={hydrate.Suggestions[0].city}&state={hydrate.Suggestions[0].state}";
                 var response2 = await client.GetAsync(smarty2);
