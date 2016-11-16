@@ -70,8 +70,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
         }
     }
     catch(Exception x){
-        log.Error($"ERROR - {x.Message}");
-        log.Error($"ERROR - {x.StackTrace}");
+        log.Error($"[ERROR] {x.Message}; {x.StackTrace}");
         return request.CreateResponse(HttpStatusCode.InternalServerError, x.Message);
     }
 }
