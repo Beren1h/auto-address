@@ -28,7 +28,7 @@ public class AddressComponent
 {
     public string short_name { get; set; }
     public string long_name { get; set; }
-    public List<string> terms { get; set; }
+    public List<string> types { get; set; }
 }
 
 public class SuggestionContainer
