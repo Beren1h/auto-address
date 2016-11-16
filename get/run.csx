@@ -53,6 +53,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var smarty2 = $"https://us-street.api.smartystreets.com/street-address?auth-id={id}&auth-token={token}&canidates=10&street={hydrate.Suggestions[0].street_line}&city={hydrate.Suggestions[0].city}&state={hydrate.Suggestions[0].state}";
             var response2 = await client.GetAsync(smarty2);
             var content2 = await response2.Content.ReadAsStringAsync();
+            log.Info(content2);
             var hydrate2 = JsonConvert.DeserializeObject<VerificationContainer>(content2);
             hydrate.Suggestions[0].zip = hydrate2.Verifications[0].components.zipcode;
         }
