@@ -67,11 +67,6 @@ public class VerificationComponent
     public string street_suffix { get; set; }
 }
 
-public static string SillyString()
-{
-    return "SillyString";
-}
-
 public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, TraceWriter log)
 {
     try{
@@ -100,8 +95,9 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                 var responseP = await client.GetAsync(googleP);
                 var contentP = await responseP.Content.ReadAsStringAsync();
                 var hydrateP = JsonConvert.DeserializeObject<ResultContainer>(contentP);
-                conversion.Suggestions[0].text = hydrateP.Results[0].formatted_address;
-                conversion.Suggestions[0].street_line = SillyString();
+                //conversion.Suggestions[0].text = hydrateP.Results[0].formatted_address;
+                //conversion.Suggestions[0].street_line = SillyString();
+                SillyString(hydrateP.Results, conversion);
             }
             return request.CreateResponse(HttpStatusCode.OK, conversion);
 
@@ -165,5 +161,56 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
     catch(Exception x){
         log.Error($"[ERROR] {x.Message}; {x.StackTrace}");
         return request.CreateResponse(HttpStatusCode.InternalServerError, x.Message);
+    }
+}
+
+
+public static SuggestionContainer SillyString(List<Result> results, SuggestionContainer conversion)
+{
+    foreach (var component in results)
+    {
+        if (component.types.Count == 1 && component.types.Contains("post_code"))
+        {
+            conversion.Suggestions[0].zipcode = component.short_name;
+        }
+
+        if (component.types.Count == 2 && component.types.Contains("administrative_area_level_1") && component.types.Contains("political"))
+        {
+            conversion.Suggestions[0].state = component.short_name;
+        }
+
+        if (component.types.Count == 2 && component.types.Contains("locality") && component.types.Contains("political"))
+        {
+            conversion.Suggestions[0].city = component.short_name;
+        }
+
+        if (component.types.Count == 1 && component.types.Contains("street_number"))
+        {
+            conversion.Suggestions[0].primary_number = component.short_name;
+        }
+
+        if (component.types.Count == 1 && component.types.Contains("route"))
+        {
+            conversion.Suggestions[0].street_line = component.short_name;
+            var split = component.short_name.Split(' ');
+
+            switch (split.Length)
+            {
+                case 1:
+                    conversion.Suggestions[0].street_name = split[0];
+                    break;
+                case 2:
+                    conversion.Suggestions[0].street_name = split[0];
+                    conversion.Suggestions[0].street_suffix = split[1];
+                    break;
+                case 3:
+                    conversion.Suggestions[0].street_predirection = split[0];
+                    conversion.Suggestions[0].street_name = split[1];
+                    conversion.Suggestions[0].street_suffix = split[2];
+                    break;
+            }
+        }
+
+        return conversion;
     }
 }
