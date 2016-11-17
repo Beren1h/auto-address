@@ -91,7 +91,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                      text = prediction.description
                  };
 
-                 conversion.Suggestions.Add(SillyString(suggestion, hydrateP));
+                 conversion.Suggestions.Add(SillyString(suggestion, hydrateP, log));
 
             }
 
@@ -171,7 +171,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
 }
 
 
-public static Suggestion SillyString(Suggestion suggestion, ResultContainer container)
+public static Suggestion SillyString(Suggestion suggestion, ResultContainer container, TraceWriter log)
 {
     foreach(var result in container.Results)
     {  
