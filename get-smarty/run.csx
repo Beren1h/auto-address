@@ -30,6 +30,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                 hydrate.Suggestions[0].street_name = hydrate2[0].components.street_name;
                 hydrate.Suggestions[0].street_suffix = hydrate2[0].components.street_suffix;
                 hydrate.Suggestions[0].street_predirection = hydrate2[0].components.street_predirection;
+                hydrate.Suggestions[0].branch = "i am a little string short and stout";
             }
             return request.CreateResponse(HttpStatusCode.OK, hydrate);
         }
