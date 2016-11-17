@@ -174,9 +174,11 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
 public static Suggestion SillyString(Suggestion suggestion, ResultContainer container)
 {
     foreach(var result in container.Results)
-    {
+    {  
+        log.Info($"results = ");
         foreach(var component in result.address_components)
         {
+            log.Info($"component = ");
             if(component.types.Count == 1 && component.types.Contains("post_code"))
             {
                 suggestion.zipcode = component.short_name;
