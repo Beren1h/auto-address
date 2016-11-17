@@ -67,7 +67,7 @@ public class VerificationComponent
     public string street_suffix { get; set; }
 }
 
-public static SillyString()
+public static string SillyString()
 {
     return "SillyString";
 }
