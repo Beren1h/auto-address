@@ -89,7 +89,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                 var hydrateP = JsonConvert.DeserializeObject<ResultContainer>(contentP);
                 var suggestion = new Suggestion{
                      text = prediction.description
-                 });
+                 };
 
                  conversion.Suggestions.Add(SillyString(suggestion, hydrateP));
 
