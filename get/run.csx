@@ -11,6 +11,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
     using(var client = new HttpClient())
     {
         var url = $"{ConfigurationManager.AppSettings["googleUrl"]}?primer={primer}";
+        log.Info(url);
         return await client.GetAsync(url);
     }
 }
