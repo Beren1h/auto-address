@@ -10,8 +10,9 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
 
     using(var client = new HttpClient())
     {
-        var switch = ConfigurationManager.AppSettings["switch"];
-        var url = $"{ConfigurationManager.AppSettings[\"{switch}\"]}&primer={primer}";
+        var which = ConfigurationManager.AppSettings["switch"];
+        var url = ConfigurationManager.AppSettings[which];
+        var final = $"{url}&primer={primer}";
         return await client.GetAsync(url);
     }
 }
