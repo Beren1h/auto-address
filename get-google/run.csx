@@ -21,6 +21,7 @@ public class ResultContainer
 
 public class Result
 {
+    public string formatted_address { get; set; }
     public List<AddressComponent> address_components { get; set; }
 }
 
@@ -74,7 +75,6 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
         var geocodeId = ConfigurationManager.AppSettings["googleGeoCodeKey"];
         var primer = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "primer", true) == 0).Value;
         var google = $"https://maps.googleapis.com/maps/api/place/autocomplete/json?input={primer}&type=address&key={placeId}";
-        
         using(var client = new HttpClient())
         {
             var response = await client.GetAsync(google);
@@ -95,14 +95,56 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                 var response2 = await client.GetAsync(google2);
                 var content2 = await response2.Content.ReadAsStringAsync();
                 var hydrate2 = JsonConvert.DeserializeObject<ResultContainer>(content2);
-                //hydrate.Suggestions[0].zipcode = hydrate2[0].components.zipcode;
-                //hydrate.Suggestions[0].primary_number = hydrate2[0].components.primary_number;
-                //hydrate.Suggestions[0].street_name = hydrate2[0].components.street_name;
-                //hydrate.Suggestions[0].street_suffix = hydrate2[0].components.street_suffix;
-                //hydrate.Suggestions[0].street_predirection = hydrate2[0].components.street_predirection;
-                return request.CreateResponse(HttpStatusCode.OK, hydrate2);
+
+                conversion.Suggestions[0].text = hydrate2.Results[0].formatted_address;
+
+                foreach (var component in hydrate2.Results[0].address_components)
+                {
+                    if (component.types.Count == 1 && component.types.Contains("post_code"))
+                    {
+                        conversion.Suggestions[0].zipcode = component.short_name;
+                    }
+
+                    if (component.types.Count == 2 && component.types.Contains("administrative_area_level_1") && component.types.Contains("political"))
+                    {
+                        conversion.Suggestions[0].state = component.short_name;
+                    }
+
+                    if (component.types.Count == 2 && component.types.Contains("locality") && component.types.Contains("political"))
+                    {
+                        conversion.Suggestions[0].city = component.short_name;
+                    }
+
+                    if (component.types.Count == 1 && component.types.Contains("street_number"))
+                    {
+                        conversion.Suggestions[0].primary_number = component.short_name;
+                    }
+
+                    if (component.types.Count == 1 && component.types.Contains("route"))
+                    {
+                        conversion.Suggestions[0].street_line = component.short_name;
+                        var split = component.short_name.Split(' ');
+
+                        switch (split.Length)
+                        {
+                            case 1:
+                                conversion.Suggestions[0].street_name = split[0];
+                                break;
+                            case 2:
+                                conversion.Suggestions[0].street_name = split[0];
+                                conversion.Suggestions[0].street_suffix = split[1];
+                                break;
+                            case 3:
+                                conversion.Suggestions[0].street_predirection = split[0];
+                                conversion.Suggestions[0].street_name = split[1];
+                                conversion.Suggestions[0].street_suffix = split[2];
+                                break;
+                        }
+                    }
+                }
+                //return request.CreateResponse(HttpStatusCode.OK, conversion);
             }
-            return request.CreateResponse(HttpStatusCode.OK, hydrate);
+            return request.CreateResponse(HttpStatusCode.OK, conversion);
         }
     }
     catch(Exception x){
