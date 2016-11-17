@@ -48,7 +48,6 @@ public class Suggestion
     public string street_predirection { get; set;}
     public string street_name { get; set; }
     public string street_suffix { get; set; }
-
 }
 
 public class Verification
@@ -172,13 +171,13 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
 }
 
 
-public static Suggestion SillyString(Suggestion suggestion, ResultsContainer container)
+public static Suggestion SillyString(Suggestion suggestion, ResultContainer container)
 {
     foreach(var result in container.Results)
     {
         foreach(var component in result.address_components)
         {
-            if(component.types.Count ==1 && component.types.Contains("post_code"))
+            if(component.types.Count == 1 && component.types.Contains("post_code"))
             {
                 suggestion.zipcode = component.short_name;
             }
