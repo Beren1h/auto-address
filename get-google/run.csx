@@ -67,6 +67,10 @@ public class VerificationComponent
     public string street_suffix { get; set; }
 }
 
+public static SillyString()
+{
+    return "SillyString";
+}
 
 public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, TraceWriter log)
 {
@@ -97,6 +101,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                 var contentP = await responseP.Content.ReadAsStringAsync();
                 var hydrateP = JsonConvert.DeserializeObject<ResultContainer>(contentP);
                 conversion.Suggestions[0].text = hydrateP.Results[0].formatted_address;
+                conversion.Suggestions[0].street_line = SillyString();
             }
             return request.CreateResponse(HttpStatusCode.OK, conversion);
 
