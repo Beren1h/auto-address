@@ -84,9 +84,16 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             };
             foreach (var prediction in hydrate.Predictions)
             {
-                 conversion.Suggestions.Add(new Suggestion{
+                var googleP = $"https://maps.googleapis.com/maps/api/geocode/json?address={hydrate.Predictions[0].description}&key={geocodeId}";
+                var responseP = await client.GetAsync(googleP);
+                var contentP = await responseP.Content.ReadAsStringAsync();
+                var hydrateP = JsonConvert.DeserializeObject<ResultContainer>(contentP);
+                var suggestion = new Suggestion{
                      text = prediction.description
                  });
+
+                 conversion.Suggestions.Add(SillyString(suggestion, hydrateP));
+
             }
 
             // foreach(var prediction in hydrate.Predictions)
@@ -165,54 +172,69 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
 }
 
 
-// public static SuggestionContainer SillyString(List<Result> results, SuggestionContainer conversion)
-// {
-//     foreach (var result in results)
-//     {
-//         foreach(var component in result.address_components)
-//         {
-//             if (component.types.Count == 1 && component.types.Contains("post_code"))
-//             {
-//                 conversion.Suggestions[0].zipcode = component.short_name;
-//             }
+public static Suggestion SillyString(Suggestion suggestion, ResultsContainer container)
+{
+    foreach(var result in container.Results)
+    {
+        foreach(var component in result.address_components)
+        {
+            if(component.types.Count ==1 && component.types.Contains("post_code"))
+            {
+                suggestion.zipcode = component.short_name;
+            }
+        }
+    }
 
-//             if (component.types.Count == 2 && component.types.Contains("administrative_area_level_1") && component.types.Contains("political"))
-//             {
-//                 conversion.Suggestions[0].state = component.short_name;
-//             }
+    return suggestion;
+    // foreach (var result in results)
+    // {
+    //     foreach(var component in result.address_components)
+    //     {
+    //         if (component.types.Count == 1 && component.types.Contains("post_code"))
+    //         {
+    //             conversion.Suggestions[0].zipcode = component.short_name;
+    //         }
 
-//             if (component.types.Count == 2 && component.types.Contains("locality") && component.types.Contains("political"))
-//             {
-//                 conversion.Suggestions[0].city = component.short_name;
-//             }
+    //         if (component.types.Count == 2 && component.types.Contains("administrative_area_level_1") && component.types.Contains("political"))
+    //         {
+    //             conversion.Suggestions[0].state = component.short_name;
+    //         }
 
-//             if (component.types.Count == 1 && component.types.Contains("street_number"))
-//             {
-//                 conversion.Suggestions[0].primary_number = component.short_name;
-//             }
+    //         if (component.types.Count == 2 && component.types.Contains("locality") && component.types.Contains("political"))
+    //         {
+    //             conversion.Suggestions[0].city = component.short_name;
+    //         }
 
-//             if (component.types.Count == 1 && component.types.Contains("route"))
-//             {
-//                 conversion.Suggestions[0].street_line = component.short_name;
-//                 var split = component.short_name.Split(' ');
+    //         if (component.types.Count == 1 && component.types.Contains("street_number"))
+    //         {
+    //             conversion.Suggestions[0].primary_number = component.short_name;
+    //         }
 
-//                 switch (split.Length)
-//                 {
-//                     case 1:
-//                         conversion.Suggestions[0].street_name = split[0];
-//                         break;
-//                     case 2:
-//                         conversion.Suggestions[0].street_name = split[0];
-//                         conversion.Suggestions[0].street_suffix = split[1];
-//                         break;
-//                     case 3:
-//                         conversion.Suggestions[0].street_predirection = split[0];
-//                         conversion.Suggestions[0].street_name = split[1];
-//                         conversion.Suggestions[0].street_suffix = split[2];
-//                         break;
-//                 }
-//             }
-//         }
-//     }
-//     return conversion;
-// }
+    //         if (component.types.Count == 1 && component.types.Contains("route"))
+    //         {
+    //             conversion.Suggestions[0].street_line = component.short_name;
+    //             var split = component.short_name.Split(' ');
+
+    //             switch (split.Length)
+    //             {
+    //                 case 1:
+    //                     conversion.Suggestions[0].street_name = split[0];
+    //                     break;
+    //                 case 2:
+    //                     conversion.Suggestions[0].street_name = split[0];
+    //                     conversion.Suggestions[0].street_suffix = split[1];
+    //                     break;
+    //                 case 3:
+    //                     conversion.Suggestions[0].street_predirection = split[0];
+    //                     conversion.Suggestions[0].street_name = split[1];
+    //                     conversion.Suggestions[0].street_suffix = split[2];
+    //                     break;
+    //             }
+    //         }
+    //     }
+    // }
+
+
+
+    return suggestions;
+}
