@@ -89,13 +89,12 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                      text = prediction.description
                  });
             }
-            return request.CreateResponse(HttpStatusCode.OK, conversion);
             if(hydrate.Predictions != null && hydrate.Predictions.Count == 1){
                 var google2 = $"https://maps.googleapis.com/maps/api/geocode/json?address={hydrate.Predictions[0].description}&key={geocodeId}";
                 var response2 = await client.GetAsync(google2);
                 var content2 = await response2.Content.ReadAsStringAsync();
                 var hydrate2 = JsonConvert.DeserializeObject<ResultContainer>(content2);
-                log.Info(content2);
+
                 conversion.Suggestions[0].text = hydrate2.Results[0].formatted_address;
 
                 foreach (var component in hydrate2.Results[0].address_components)
