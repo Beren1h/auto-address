@@ -210,7 +210,6 @@ public static SuggestionContainer SillyString(List<Result> results, SuggestionCo
                     break;
             }
         }
-
-        return conversion;
     }
+    return conversion;
 }
