@@ -89,6 +89,17 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                      text = prediction.description
                  });
             }
+
+            foreach(var prediction in hydrate.Predeictions)
+            {
+                var googleP = $"https://maps.googleapis.com/maps/api/geocode/json?address={hydrate.Predictions[0].description}&key={geocodeId}";
+                var responseP = await client.GetAsync(googleP);
+                var contentP = await responseP.Content.ReadAsStringAsync();
+                var hydrateP = JsonConvert.DeserializeObject<ResultContainer>(contentP);
+                conversion.Suggestions[0].text = hydrateP.Results[0].formatted_address;
+            }
+            return request.CreateResponse(HttpStatusCode.OK, conversion);
+            
             if(hydrate.Predictions != null && hydrate.Predictions.Count == 1){
                 var google2 = $"https://maps.googleapis.com/maps/api/geocode/json?address={hydrate.Predictions[0].description}&key={geocodeId}";
                 var response2 = await client.GetAsync(google2);
