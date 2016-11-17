@@ -90,7 +90,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                  });
             }
 
-            foreach(var prediction in hydrate.Predeictions)
+            foreach(var prediction in hydrate.Predictions)
             {
                 var googleP = $"https://maps.googleapis.com/maps/api/geocode/json?address={hydrate.Predictions[0].description}&key={geocodeId}";
                 var responseP = await client.GetAsync(googleP);
@@ -99,7 +99,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                 conversion.Suggestions[0].text = hydrateP.Results[0].formatted_address;
             }
             return request.CreateResponse(HttpStatusCode.OK, conversion);
-            
+
             if(hydrate.Predictions != null && hydrate.Predictions.Count == 1){
                 var google2 = $"https://maps.googleapis.com/maps/api/geocode/json?address={hydrate.Predictions[0].description}&key={geocodeId}";
                 var response2 = await client.GetAsync(google2);
