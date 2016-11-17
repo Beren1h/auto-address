@@ -96,7 +96,6 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                 var content2 = await response2.Content.ReadAsStringAsync();
                 var hydrate2 = JsonConvert.DeserializeObject<ResultContainer>(content2);
                 log.Info(content2);
-                //force delpoy
                 conversion.Suggestions[0].text = hydrate2.Results[0].formatted_address;
 
                 foreach (var component in hydrate2.Results[0].address_components)
