@@ -42,7 +42,6 @@ public class Suggestion
     public string street_predirection { get; set;}
     public string street_name { get; set; }
     public string street_suffix { get; set; }
-    public string branch { get; set;}
 }
 
 public class Verification
