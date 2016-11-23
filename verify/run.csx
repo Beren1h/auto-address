@@ -18,6 +18,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
         
         using(var client = new HttpClient())
         {
+            //for deploy
             //var response = await client.GetAsync(smarty);
             //var content = await response.Content.ReadAsStringAsync();
             //var hydrate = JsonConvert.DeserializeObject<SuggestionContainer>(content);
