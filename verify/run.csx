@@ -11,9 +11,9 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
     try{
         var id = ConfigurationManager.AppSettings["SmartyAuthId"];
         var token = ConfigurationManager.AppSettings["SmartyAuthToken"];
-        var streetLine = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "street", true) == 0).Value;
-        var city = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "city", true) == 0).Value;
-        var state = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "state", true) == 0).Value;
+        var primer = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "primer", true) == 0).Value;
+        //var city = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "city", true) == 0).Value;
+        //var state = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "state", true) == 0).Value;
         //var smarty = $"https://us-autocomplete.api.smartystreets.com/suggest?auth-id={id}&auth-token={token}&prefix={primer}";
         
         using(var client = new HttpClient())
@@ -23,14 +23,16 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             //var content = await response.Content.ReadAsStringAsync();
             //var hydrate = JsonConvert.DeserializeObject<SuggestionContainer>(content);
 
-                var smarty2 = $"https://us-street.api.smartystreets.com/street-address?auth-id={id}&auth-token={token}&canidates=10&street={streetLine}&city={city}&state={state}";
+                //var smarty2 = $"https://us-street.api.smartystreets.com/street-address?auth-id={id}&auth-token={token}&canidates=10&street={streetLine}&city={city}&state={state}";
+                var smarty2 = $"https://us-street.api.smartystreets.com/street-address?auth-id={id}&auth-token={token}&canidates=1&street={primer}";
                 var response2 = await client.GetAsync(smarty2);
                 var content2 = await response2.Content.ReadAsStringAsync();
                 var hydrate2 = JsonConvert.DeserializeObject<List<Verification>>(content2);
                 var verified = new SuggestionContainer{
                     Suggestions = new List<Suggestion>{
                         new Suggestion{
-                            text = streetLine,
+                            text = primer,
+                            street_line = hydrate2[0.delivery_line_1,]
                             zipcode = hydrate2[0].components.zipcode,
                             primary_number = hydrate2[0].components.primary_number,
                             city = hydrate2[0].components.city_name,
