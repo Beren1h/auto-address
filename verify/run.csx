@@ -37,7 +37,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                             street_predirection = hydrate2[0].components.street_predirection
                         }
                     }
-                }
+                };
                 //hydrate.Suggestions[0].text = streetLine;
                 //hydrate.Suggestions[0].zipcode = hydrate2[0].components.zipcode;
                 //hydrate.Suggestions[0].primary_number = hydrate2[0].components.primary_number;
