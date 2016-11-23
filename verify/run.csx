@@ -32,6 +32,9 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                             text = streetLine,
                             zipcode = hydrate2[0].components.zipcode,
                             primary_number = hydrate2[0].components.primary_number,
+                            city = hydrate2[0].components.city_name,
+                            zipcode = hydrate2[0].components.zipcode,
+                            state = hydrate2[0].components.state_abbreviation,
                             street_name = hydrate2[0].components.street_name,
                             street_suffix = hydrate2[0].components.street_suffix,
                             street_predirection = hydrate2[0].components.street_predirection
