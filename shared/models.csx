@@ -58,4 +58,5 @@ public class VerificationComponent
     public string street_predirection { get; set;}
     public string street_name { get; set; }
     public string street_suffix { get; set; }
+    public string state_abbreviation { get; set; }
 }
