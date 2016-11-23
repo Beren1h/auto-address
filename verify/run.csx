@@ -32,7 +32,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                     Suggestions = new List<Suggestion>{
                         new Suggestion{
                             text = primer,
-                            street_line = hydrate2[0.delivery_line_1,]
+                            street_line = hydrate2[0].delivery_line_1,
                             zipcode = hydrate2[0].components.zipcode,
                             primary_number = hydrate2[0].components.primary_number,
                             city = hydrate2[0].components.city_name,
