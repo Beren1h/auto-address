@@ -28,12 +28,14 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
                 var hydrate2 = JsonConvert.DeserializeObject<List<Verification>>(content2);
                 var verified = new SuggestionContainer{
                     Suggestions = new List<Suggestion>{
-                        text = streetLine,
-                        zipcode = hydrate2[0].components.zipcode,
-                        primary_number = hydrate2[0].components.primary_number,
-                        street_name = hydrate2[0].components.street_name,
-                        street_suffix = hydrate2[0].components.street_suffix,
-                        street_predirection = hydrate2[0].components.street_predirection
+                        new Suggestion{
+                            text = streetLine,
+                            zipcode = hydrate2[0].components.zipcode,
+                            primary_number = hydrate2[0].components.primary_number,
+                            street_name = hydrate2[0].components.street_name,
+                            street_suffix = hydrate2[0].components.street_suffix,
+                            street_predirection = hydrate2[0].components.street_predirection
+                        }
                     }
                 }
                 //hydrate.Suggestions[0].text = streetLine;
