@@ -12,7 +12,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
         var placeId = ConfigurationManager.AppSettings["googlePlaceKey"];
         var geocodeId = ConfigurationManager.AppSettings["googleGeoCodeKey"];
         var primer = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "primer", true) == 0).Value;
-        var google = $"https://maps.googleapis.com/maps/api/place/autocomplete/json?input={primer}&type=address&key={placeId}";
+        var google = $"https://maps.googleapis.com/maps/api/place/autocomplete/json?input={primer}&type=address&key={placeId}&region=us";
         using(var client = new HttpClient())
         {
             var response = await client.GetAsync(google);
