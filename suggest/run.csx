@@ -12,7 +12,12 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
         var id = ConfigurationManager.AppSettings["SmartyAuthId"];
         var token = ConfigurationManager.AppSettings["SmartyAuthToken"];
         var primer = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "primer", true) == 0).Value;
+        var center = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "us", true) == 0).Value;
         var smarty = $"https://us-autocomplete.api.smartystreets.com/suggest?auth-id={id}&auth-token={token}&suggestions=5&prefix={primer}";
+
+        if(!string.IsNullOrEmpty(center)){
+            smarty = smarty + "&state_filter=" + center;
+        }
         
         using(var client = new HttpClient())
         {
