@@ -6,7 +6,7 @@ public class CityState
 
 public class ZipCode
 {
-    public List<CityState> CityStates { get; set; }
+    public List<CityState> city_states { get; set; }
 }
 
 public class SuggestionContainer
