@@ -18,6 +18,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var smarty = $"https://us-zipcode.api.smartystreets.com/lookup?auth-id={id}&auth-token={token}&zipcode={primer}";
             var response = await client.GetAsync(smarty);
             var content = await response.Content.ReadAsStringAsync();
+            log.Info(content);
             var hydrate = JsonConvert.DeserializeObject<List<ZipCode>>(content);
 
             return request.CreateResponse(HttpStatusCode.OK, hydrate);
