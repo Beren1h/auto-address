@@ -1,3 +1,14 @@
+public class CityState
+{
+    public string city { get; set; }
+    public string state_abbreviation { get; set; }
+}
+
+public class ZipCode
+{
+    public List<CityState> CityStates { get; set; }
+}
+
 public class SuggestionContainer
 {
     public List<Suggestion> Suggestions { get; set; }
