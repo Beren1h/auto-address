@@ -16,7 +16,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
         var smarty = $"https://us-autocomplete.api.smartystreets.com/suggest?auth-id={id}&auth-token={token}&suggestions=5&prefix={primer}";
 
         if(!string.IsNullOrEmpty(center)){
-            smarty = smarty + "&state_filter=" + center;
+            smarty = smarty + "&prefer=" + center;
         }
         
         using(var client = new HttpClient())
