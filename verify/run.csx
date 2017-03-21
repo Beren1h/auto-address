@@ -20,7 +20,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var content2 = await response2.Content.ReadAsStringAsync();
             var hydrate2 = JsonConvert.DeserializeObject<List<Verification>>(content2);
             foreach(var verification in hydrate2){
-                log.Inof(verification.GetType());
+                log.Info(verification.GetType());
             }
             return request.CreateResponse(HttpStatusCode.OK, hydrate2);
         }
