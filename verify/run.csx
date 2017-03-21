@@ -12,6 +12,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
         var id = ConfigurationManager.AppSettings["SmartyAuthId"];
         var token = ConfigurationManager.AppSettings["SmartyAuthToken"];
         var primer = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "primer", true) == 0).Value;
+        var shouldConvert = request.GetQueryNameValuePairs().FirstOrDefault(q => string.Compare(q.Key, "cv", true) == 0).Value;
         
         using(var client = new HttpClient())
         {
@@ -19,10 +20,16 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var response2 = await client.GetAsync(smarty2);
             var content2 = await response2.Content.ReadAsStringAsync();
             var hydrate2 = JsonConvert.DeserializeObject<List<Verification>>(content2);
-            foreach(var verification in hydrate2){
-                foreach (var component in verification.components)
-                {
-                    log.Info("component = " + component.GetType().ToString());
+            if(shouldConvert == 'y'){
+                foreach(var verification in hydrate2){
+                    switch(verification.components.street_suffix){
+                        case "Ter":
+                            verification.components.street_suffix = "TERR";
+                            break;
+                        case "Trl":
+                            verification.components.street_suffix = "TR";
+                            break;
+                    }
                 }
             }
             return request.CreateResponse(HttpStatusCode.OK, hydrate2);
