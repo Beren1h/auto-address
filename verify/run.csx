@@ -19,7 +19,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var response2 = await client.GetAsync(smarty2);
             var content2 = await response2.Content.ReadAsStringAsync();
             var hydrate2 = JsonConvert.DeserializeObject<List<Verification>>(content2);
-            foreach(var verificaiotn in hydrate2){
+            foreach(var verification in hydrate2){
                 foreach(var component in verification.components){
                     log.Info('street type =', component.street_suffix);
                 }
