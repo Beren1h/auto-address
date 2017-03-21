@@ -20,7 +20,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage request, Tr
             var response2 = await client.GetAsync(smarty2);
             var content2 = await response2.Content.ReadAsStringAsync();
             var hydrate2 = JsonConvert.DeserializeObject<List<Verification>>(content2);
-            if(shouldConvert == 'y'){
+            if(shouldConvert == "y"){
                 foreach(var verification in hydrate2){
                     switch(verification.components.street_suffix){
                         case "Ter":
